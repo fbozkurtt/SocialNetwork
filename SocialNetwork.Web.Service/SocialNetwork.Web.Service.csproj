@@ -118,6 +118,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003262212118_init.cs" />
+    <Compile Include="Migrations\202003262212118_init.designer.cs">
+      <DependentUpon>202003262212118_init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Entity\Post.cs" />
     <Compile Include="Models\Entity\User.cs" />
     <Compile Include="Models\SocialNetworkContext.cs" />
@@ -135,6 +140,11 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202003262212118_init.resx">
+      <DependentUpon>202003262212118_init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
