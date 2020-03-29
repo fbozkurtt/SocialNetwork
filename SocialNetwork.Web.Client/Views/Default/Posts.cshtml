@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "Posts";
+}
+<div class="row">
+    <div class="col-8" style="margin-top: 10%; margin-left: 10%; width: 50%;">
+        <form>
+            <div class="form-group">
+                <input type="text" class="form-control" id="title" placeholder="A Creative Title" ng-model="title">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" style="height: 250px" id="body" placeholder="Content" ng-model="body"></textarea>
+            </div>
+            <button class="btn btn-info" ng-click="CreatePost()">Post</button>
+            <br />
+            <br />
+            <span style="color: red" id="errorMessage"></span>
+        </form>
+    </div>
+    @*<div ng-repeat="item in posts">
+        {{item.Title}}
+        {{item.Body}}
+        {{item.UserId}}
+        {{item.DateCreated}}
+    </div>*@
+</div>
+

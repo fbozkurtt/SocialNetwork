@@ -15,7 +15,7 @@ namespace SocialNetwork.Web.Service.Models.Entity
         public string Name { get; set; }
         public string Lastname { get; set; }
         public DateTime DateCreated { get; set; }
-        public DateTime DateBirth { get; set; }
+        public string DateBirth { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
     }

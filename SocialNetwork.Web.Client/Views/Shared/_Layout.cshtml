@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html ng-app="app" ng-controller="DefaultController">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/angular-cookies.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/main.js"></script>
+</head>
+<body style="background-color: #f7e3ff;">
+    <nav class="navbar navbar-default" ng-if="session">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Social Site</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="/social/posts">Posts</a></li>
+                <li><a href="#">Users</a></li>
+                <li><a href="#">Admin Panel</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy;@DateTime.Now.Year Social Network by Furkan BOZKURT<br />token: <span style="opacity: 0.5">{{token}}</span></p>
+        </footer>
+    </div>
+</body>
+</html>
