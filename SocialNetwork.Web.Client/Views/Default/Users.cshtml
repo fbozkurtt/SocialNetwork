@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>Users</h2>
+
+<p ng-repeat="item in users">
+    {{item.Name}} {{item.Lastname}}
+</p>
+
+<h2 style="color: red" id="errorMessage"></h2>

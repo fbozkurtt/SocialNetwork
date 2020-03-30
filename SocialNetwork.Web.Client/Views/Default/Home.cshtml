@@ -2,7 +2,11 @@
 @{
     ViewBag.Title = "Home";
 }
-<div class="row" ng-repeat="item in profile">
-    {{item}}
-</div>
+<h4>Welcome {{profile.Name + ' ' + profile.Lastname}}!</h4>
+<h2>This is your profile</h2>
+<h4>you were born in <span style="color: red;">{{profile.DateBirth}}</span></h4>
+<h4>your username is <span style="color: red;">{{profile.Username}}</span></h4>
+<h4>your email is <span style="color: red;">{{profile.Email}}</span></h4>
+<h4>your role is <span style="color: red;">{{profile.Role}}</span></h4>
+<h4>your account was created on <span style="color: red;">{{profile.DateCreated | date:'dd-MM-yyyy HH:mm:ss'}}</span></h4>
 

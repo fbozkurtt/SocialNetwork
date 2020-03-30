@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Posts";
 }
 <div class="row">
@@ -11,17 +10,21 @@
             <div class="form-group">
                 <textarea class="form-control" style="height: 250px" id="body" placeholder="Content" ng-model="body"></textarea>
             </div>
-            <button class="btn btn-info" ng-click="CreatePost()">Post</button>
+            <div class="form-group">
+                <label for="media" class="btn btn-info">Select Image</label>
+                <input type="file" style="visibility:hidden;" id="media" ng-model="media">
+            </div>
+            <button class="btn btn-primary" style="width: 100px;float: right;" ng-click="CreatePost()">Post</button>
             <br />
             <br />
             <span style="color: red" id="errorMessage"></span>
         </form>
     </div>
-    @*<div ng-repeat="item in posts">
-        {{item.Title}}
-        {{item.Body}}
-        {{item.UserId}}
-        {{item.DateCreated}}
-    </div>*@
 </div>
-
+<div class="row" ng-repeat="item in posts">
+    <div class="col-8" style="margin-top: 10%; margin-left: 10%; width: 50%;">
+        <h3 style="background-color: white;">{{item.Title}}</h3>
+        <p style="background-color: #ff5151; color: white;">{{item.Body}}</p>
+        <span style="font-size: smaller">Posted by {{item.User}} on {{item.Date}}</span>
+    </div>
+</div>

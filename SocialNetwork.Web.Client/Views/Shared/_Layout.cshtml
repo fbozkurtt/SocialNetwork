@@ -5,32 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="~/favicon.jpg">
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     <script src="~/Scripts/angular.min.js"></script>
     <script src="~/Scripts/angular-cookies.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/main.js"></script>
 </head>
-<body style="background-color: #f7e3ff;">
+<body style="background-color: #f7e3ff; height: 100%; position: relative;">
     <nav class="navbar navbar-default" ng-if="session">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Social Site</a>
+                <a class="navbar-brand" href="/social/home">Social Site</a>
             </div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="/social/posts">Posts</a></li>
-                <li><a href="#">Users</a></li>
-                <li><a href="#">Admin Panel</a></li>
+                <li id="PostsNav"><a href="/social/posts">Posts</a></li>
+                <li id="UsersNav"><a href="/social/users">Users</a></li>
+                <li id="AdminNav"><a href="/social/admin">Admin Panel</a></li>
+                <li style="right: 0;"><a href="#" ng-click="Logout()">Logout</a></li>
             </ul>
         </div>
     </nav>
-    <div class="container">
+    <div style="min-height: 100vh; overflow: hidden; display: block; position: relative; padding-bottom: 50px; margin-left: 5%; margin-right: 5%; margin-top: 5%;">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy;@DateTime.Now.Year Social Network by Furkan BOZKURT<br />token: <span style="opacity: 0.5">{{token}}</span></p>
-        </footer>
     </div>
+    <footer class="panel-footer" style="height: 50px; position: absolute; bottom: 0; width: 100%;">
+        <p>&copy;@DateTime.Now.Year Social Network by <b>Furkan BOZKURT</b></p>
+    </footer>
+    <script>
+        var href = window.document.location.href;
+        if (href.includes("posts"))
+            $("#PostsNav").toggleClass("active");
+        if (href.includes("users"))
+            $("#UsersNav").toggleClass("active");
+        if (href.includes("admin"))
+            $("#AdminNav").toggleClass("active");
+    </script>
 </body>
 </html>

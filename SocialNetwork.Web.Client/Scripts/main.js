@@ -21,6 +21,11 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
                     $("#errorMessage").text("Wrong credentials");
             });
     }
+    $scope.Logout = function () {
+        $cookies.remove('token');
+        $scope.token = null;
+        window.location.replace("/social/login");
+    }
     $scope.CreatePost = function() {
         $http({
             method: 'POST',
@@ -33,7 +38,7 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
             .then(function (res) {
                 console.log(res.data);
                 if (res.data.success) {
-                    //window.location.replace("/social/posts");
+                    window.location.replace("/social/posts");
                 }
                 else
                     $("#errorMessage").text("Request couldn't complete");
@@ -70,14 +75,79 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
                     window.location.replace("/social/login");
             });
     }
+    $scope.DeleteEverything = function () {
+        $http({
+            method: 'GET',
+            url: 'http://localhost/socialnet/api/DeleteEverything',
+            headers: {
+                'authorization': 'bearer ' + $scope.token
+            }
+        })
+            .then(function (res) {
+                console.log(res.data)
+                if (res.data.success) {
+                    window.location.replace("/social/admin");
+                }
+                else
+                    $("#errorMessage").text(res.data.error);
+            });
+    }
+    $scope.Register = function () {
+        $http({
+            method: 'POST',
+            url: 'http://localhost/socialnet/api/Register',
+            data: {
+                Username: $scope.username,
+                Password: $scope.password,
+                Name: $scope.name,
+                Lastname: $scope.lastname,
+                DateBirth: $scope.datebirth,
+                Email: $scope.email,
+                Role: 'user'
+            }
+        })
+            .then(function (res) {
+                console.log(res.data);
+                if (res.data.success) {
+                    window.location.replace("/social/login");
+                }
+                else
+                    $("#errorMessage").text(res.data.error);
+            });
+    }
+    $scope.GetUsers = function () {
+        $http({
+            method: 'GET',
+            url: 'http://localhost/socialnet/api/GetAllUsers',
+            headers: {
+                'authorization': 'bearer ' + $scope.token
+            }
+        })
+            .then(function (res) {
+                if (res.data.success) {
+                    $scope.users = res.data.users;
+                }
+            })
+            .catch(function () {
+                $("#errorMessage").text("You have to be authorized to view this page");
+            });
+        
+    }
     $scope.OnLoad = function () {
-        //if ($scope.token != null && $scope.href.includes("login"))
-        //    window.location.replace("/social/home");
-        //if ($scope.token == null && !$scope.href.includes("login"))
-        //    window.location.replace("/social/login");
+        if (($scope.token != null) && ($scope.href.includes("login") || $scope.href.includes("register")))
+            window.location.replace("/social/home");
+        if ($scope.token == null && !$scope.href.includes("login") && !$scope.href.includes("register"))
+            window.location.replace("/social/login");
         if ($scope.href.includes("posts"))
             $scope.GetPosts();
-        $scope.Profile();
+        if (!$scope.href.includes("login") && !$scope.href.includes("register"))
+            $scope.Profile();
+        if ($scope.href.includes("users"))
+            $scope.GetUsers();
+        //    if ($scope.href.includes("posts"))
+        //        $("#PostsNav").toggleClass("active");
+        //    if ($scope.href.includes("users"))
+        //        $("#UsersNav").toggleClass("active");
     }
     $scope.OnLoad();
 });

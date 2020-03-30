@@ -11,6 +11,7 @@ using System.Web.Http.Cors;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json.Linq;
+using SocialNetwork.Web.Service.ViewModels;
 
 namespace SocialNetwork.Web.Service.Controllers
 {
@@ -18,22 +19,32 @@ namespace SocialNetwork.Web.Service.Controllers
     [Authorize]
     public class DefaultController : ApiController
     {
-        public static readonly SocialNetworkContext ctx = new SocialNetworkContext();
         private static readonly HttpClient Client = new HttpClient();
 
         [HttpPost]
         [AllowAnonymous]
         public IHttpActionResult Register([FromBody] User user)
         {
-            try
+            if (user.Email == null || user.Name == null || user.Lastname == null || user.Password == null)
             {
-                user.DateCreated = DateTime.Now;
-                ctx.Users.Add(user);
-                ctx.SaveChanges();
                 return Json(new
                 {
-                    success = true
+                    success = false,
+                    error = "Please fill al the fields"
                 });
+            }
+            try
+            {
+                using (var ctx = new SocialNetworkContext())
+                {
+                    user.DateCreated = DateTime.Now;
+                    ctx.Users.Add(user);
+                    ctx.SaveChanges();
+                    return Json(new
+                    {
+                        success = true
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -67,16 +78,20 @@ namespace SocialNetwork.Web.Service.Controllers
             }
         }
         [HttpGet]
-        [Authorize(Roles = "user, admin, superadmin")]
+        [Authorize(Roles = "admin, superadmin")]
         public IHttpActionResult GetAllUsers()
         {
             try
             {
-                var users = ctx.Users.ToList();
-                return Json(new
+                using (var ctx = new SocialNetworkContext())
                 {
-                    users
-                });
+                    var users = ctx.Users.ToList();
+                    return Json(new
+                    {
+                        success = true,
+                        users
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -93,14 +108,17 @@ namespace SocialNetwork.Web.Service.Controllers
         {
             try
             {
-                post.DateCreated = DateTime.Now;
-                post.UserId = GetCurrentUser().Id;
-                ctx.Posts.Add(post);
-                ctx.SaveChanges();
-                return Json(new
+                using (var ctx = new SocialNetworkContext())
                 {
-                    success = true
-                });
+                    post.DateCreated = DateTime.Now;
+                    post.UserId = GetCurrentUser().Id;
+                    ctx.Posts.Add(post);
+                    ctx.SaveChanges();
+                    return Json(new
+                    {
+                        success = true
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -117,20 +135,35 @@ namespace SocialNetwork.Web.Service.Controllers
         {
             try
             {
-                var posts = ctx.Posts.ToList();
-                ctx.SaveChanges();
-                return Json(new
+                using (var ctx = new SocialNetworkContext())
                 {
-                    success = true,
-                    posts
-                });
+                    var posts = ctx.Posts.OrderByDescending(w => w.DateCreated).ToList();
+                    List<PostViewModel> model = new List<PostViewModel>();
+                    foreach (var p in posts)
+                    {
+                        var user = ctx.Users.Where(w => w.Id == p.UserId).FirstOrDefault();
+                        model.Add(new PostViewModel()
+                        {
+                            Body = p.Body,
+                            Title = p.Title,
+                            Date = p.DateCreated.ToString("HH:mm:ss dddd MMMM yyyy"),
+                            User = user.Username
+                        });
+                    }
+                    ctx.SaveChanges();
+                    return Json(new
+                    {
+                        success = true,
+                        posts = model
+                    });
+                }
             }
             catch (Exception ex)
             {
                 return Json(new
                 {
                     success = false,
-                    error = ex.Message
+                    error = ex
                 });
             }
         }
@@ -167,14 +200,43 @@ namespace SocialNetwork.Web.Service.Controllers
                 });
             }
         }
+        [HttpGet]
+        [Authorize(Roles = "superadmin")]
+        public IHttpActionResult DeleteEverything()
+        {
+            try
+            {
+                using (var ctx = new SocialNetworkContext())
+                {
+                    ctx.Users.RemoveRange(ctx.Users.Where(w=>w.Role.Equals("user")));
+                    ctx.Posts.RemoveRange(ctx.Posts);
+                    ctx.SaveChanges();
+                    return Json(new
+                    {
+                        success = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    error = ex.Message
+                });
+            }
+        }
         [NonAction]
         public User GetCurrentUser()
         {
-            var identity = (ClaimsIdentity)User.Identity;
-            var claims = identity.Claims.ToList();
-            var username = claims[1].Value;
-            var user = ctx.Users.SingleOrDefault(w => w.Username == username);
-            return user;
+            using (var ctx = new SocialNetworkContext())
+            {
+                var identity = (ClaimsIdentity)User.Identity;
+                var claims = identity.Claims.ToList();
+                var username = claims[1].Value;
+                var user = ctx.Users.SingleOrDefault(w => w.Username == username);
+                return user;
+            }
         }
     }
 }

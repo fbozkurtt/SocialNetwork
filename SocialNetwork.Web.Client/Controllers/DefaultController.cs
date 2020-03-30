@@ -12,11 +12,23 @@ namespace SocialNetwork.Web.Client.Controllers
         {
             return View();
         }
+        public ActionResult Register()
+        {
+            return View();
+        }
         public ActionResult Home()
         {
             return View();
         }
         public ActionResult Posts()
+        {
+            return View();
+        }
+        public ActionResult Users()
+        {
+            return View();
+        }
+        public ActionResult Admin()
         {
             return View();
         }
