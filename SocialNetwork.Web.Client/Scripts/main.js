@@ -9,7 +9,6 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
         $http({
             method: 'POST',
             url: 'http://localhost/socialnet/api/Login?username=' + $scope.username + '&password=' + $scope.password,
-            //data: { username: $scope.username, password: $scope.password }
         })
             .then(function (res) {
                 console.log(res.data);
@@ -26,11 +25,16 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
         $scope.token = null;
         window.location.replace("/social/login");
     }
-    $scope.CreatePost = function() {
+    $scope.CreatePost = function () {
+        console.log($scope.media);
         $http({
             method: 'POST',
             url: 'http://localhost/socialnet/api/CreatePost',
-            data: { Title: $scope.title, Body: $scope.body },
+            data: {
+                Title: $scope.title,
+                Body: $scope.body,
+                Media: $scope.media
+            },
             headers: {
                 'authorization': 'bearer ' + $scope.token
             }
@@ -84,12 +88,12 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
             }
         })
             .then(function (res) {
-                console.log(res.data)
                 if (res.data.success) {
-                    window.location.replace("/social/admin");
+                    $("#successMessage").text("Operation succeed");
                 }
-                else
-                    $("#errorMessage").text(res.data.error);
+            })
+            .catch(function () {
+                $("#errorMessage").text("You have to be authorized to perform this action");
             });
     }
     $scope.Register = function () {
@@ -129,9 +133,9 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
                 }
             })
             .catch(function () {
-                $("#errorMessage").text("You have to be authorized to view this page");
+                $("#errorMessage").text("You have to be authorized to view this content");
             });
-        
+
     }
     $scope.OnLoad = function () {
         if (($scope.token != null) && ($scope.href.includes("login") || $scope.href.includes("register")))
@@ -151,3 +155,21 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
     }
     $scope.OnLoad();
 });
+app.directive("fileread", [function () {
+    return {
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                var reader = new FileReader();
+                reader.onload = function (loadEvent) {
+                    scope.$apply(function () {
+                        scope.fileread = loadEvent.target.result;
+                    });
+                }
+                reader.readAsDataURL(changeEvent.target.files[0]);
+            });
+        }
+    }
+}]);

@@ -15,6 +15,5 @@ namespace SocialNetwork.Web.Service.Models
         {
 
         }
-
     }
 }

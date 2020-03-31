@@ -14,5 +14,6 @@ namespace SocialNetwork.Web.Service.Models.Entity
         public string Title { get; set; }
         public string Body { get; set; }
         public DateTime DateCreated { get; set; }
+        public string Media { get; set; }
     }
 }

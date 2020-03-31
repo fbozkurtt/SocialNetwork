@@ -3,3 +3,7 @@
     ViewBag.Title = "Login";
 }
 <h1>admin</h1>
+<h3>The button below will delete every account and every post except for this account, will you proceed and delete everything?</h3>
+<button class="btn btn-danger" id="deleteButton" style="width: 100px" ng-click="DeleteEverything()">Delete</button>
+<h2 style="color: red" id="errorMessage"></h2>
+<h2 style="color: green" id="successMessage"></h2>

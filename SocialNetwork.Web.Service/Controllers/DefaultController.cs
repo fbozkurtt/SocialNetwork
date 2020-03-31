@@ -147,7 +147,8 @@ namespace SocialNetwork.Web.Service.Controllers
                             Body = p.Body,
                             Title = p.Title,
                             Date = p.DateCreated.ToString("HH:mm:ss dddd MMMM yyyy"),
-                            User = user.Username
+                            User = user.Username,
+                            Media = p.Media
                         });
                     }
                     ctx.SaveChanges();

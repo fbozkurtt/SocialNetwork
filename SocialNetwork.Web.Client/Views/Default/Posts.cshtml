@@ -2,7 +2,7 @@
     ViewBag.Title = "Posts";
 }
 <div class="row">
-    <div class="col-8" style="margin-top: 10%; margin-left: 10%; width: 50%;">
+    <div class="col-12" style="margin-top: 10%; margin-left: 10%; width: 70%;">
         <form>
             <div class="form-group">
                 <input type="text" class="form-control" id="title" placeholder="A Creative Title" ng-model="title">
@@ -12,7 +12,7 @@
             </div>
             <div class="form-group">
                 <label for="media" class="btn btn-info">Select Image</label>
-                <input type="file" style="visibility:hidden;" id="media" ng-model="media">
+                <input type="file" style="visibility:hidden;" id="media" fileread="media">
             </div>
             <button class="btn btn-primary" style="width: 100px;float: right;" ng-click="CreatePost()">Post</button>
             <br />
@@ -21,10 +21,11 @@
         </form>
     </div>
 </div>
-<div class="row" ng-repeat="item in posts">
-    <div class="col-8" style="margin-top: 10%; margin-left: 10%; width: 50%;">
-        <h3 style="background-color: white;">{{item.Title}}</h3>
-        <p style="background-color: #ff5151; color: white;">{{item.Body}}</p>
-        <span style="font-size: smaller">Posted by {{item.User}} on {{item.Date}}</span>
+<div class="row" ng-repeat="item in posts" style="background-color: antiquewhite; border: double; margin-top: 10%; margin-left: 10%; width: 70%;">
+    <div class="col-6" style="padding-right: 10%; padding-left: 10px">
+        <h3>{{item.Title}}</h3>
+        <h5 style="padding-bottom: 10%; padding-top: 5%">{{item.Body}}</h5>
+        <span style="font-size: medium; padding-bottom: 10%">Posted by {{item.User}} on {{item.Date}}</span>
+        <img style="width: 50%; margin-bottom: 5%; margin-left: 50%; margin-top: 5%; border: groove; border-radius: 5%" src="{{item.Media}}" alt="Media" />
     </div>
 </div>

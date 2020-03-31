@@ -16,6 +16,7 @@
                         Title = c.String(),
                         Body = c.String(),
                         DateCreated = c.DateTime(nullable: false),
+                        Media = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -29,7 +30,7 @@
                         Name = c.String(),
                         Lastname = c.String(),
                         DateCreated = c.DateTime(nullable: false),
-                        DateBirth = c.DateTime(nullable: false),
+                        DateBirth = c.String(),
                         Email = c.String(),
                         Role = c.String(),
                     })
