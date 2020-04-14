@@ -13,7 +13,6 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
             url: 'http://localhost/socialnet/api/Login?username=' + $scope.username + '&password=' + $scope.password,
         })
             .then(function (res) {
-                console.log(res.data);
                 if (res.data.success) {
                     $cookies.put('token', res.data.token);
                     window.location.replace("/social/home");
@@ -28,7 +27,6 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
         window.location.replace("/social/login");
     }
     $scope.CreatePost = function () {
-        console.log($scope.media);
         $http({
             method: 'POST',
             url: 'http://localhost/socialnet/api/CreatePost',
@@ -59,11 +57,12 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
             }
         })
             .then(function (res) {
-                console.log(res.data);
                 if (res.data.message == 'Followed')
-                    $('fb' + id).text = 'Unfollow'
+                    $('#fb' + id).text('Unfollow')
                 else if (res.data.message == 'Unfollowed')
-                    $('fb' + id).text = 'Follow'
+                    $('#fb' + id).text('Follow')
+                if (!res.data.succes)
+                    $("#errorMessage").text(res.data.error);
             });
     }
     $scope.GetPosts = function () {
@@ -75,7 +74,6 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
             }
         })
             .then(function (res) {
-                console.log(res.data);
                 if (res.data.success) {
                     $scope.posts = res.data.posts;
                 }
@@ -94,7 +92,6 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
                     $scope.profile = res.data.user;
                     $scope.follows = res.data.follows;
                     $scope.followers = res.data.followers;
-                    console.log($scope.follows);
                 }
                 else
                     window.location.replace("/social/login");
@@ -132,7 +129,6 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
             }
         })
             .then(function (res) {
-                console.log(res.data);
                 if (res.data.success) {
                     window.location.replace("/social/login");
                 }

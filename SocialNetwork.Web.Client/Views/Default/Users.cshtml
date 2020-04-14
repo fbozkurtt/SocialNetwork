@@ -7,11 +7,11 @@
 
 <div ng-repeat="item in users">
     <h4>{{item.Name}} {{item.Lastname}}</h4>
-    <div ng-if="follows.includes(item.id)">
+    <div ng-if="follows.includes(item.Id)">
         <button id="fb{{item.Id}}" class="btn btn-info" style="width: 100px" ng-click="Follow(item.Id)">Unfollow</button>
     </div>
-    <div ng-if="!follows.includes(item.id)">
-        <button id="fb{{item.Id}}" class="btn btn-info" style="width: 100px" ng-click="Follow(item.Id)">follow</button>
+    <div ng-if="!follows.includes(item.Id)">
+        <button id="fb{{item.Id}}" class="btn btn-info" style="width: 100px" ng-click="Follow(item.Id)">Follow</button>
     </div>
 </div>
 
