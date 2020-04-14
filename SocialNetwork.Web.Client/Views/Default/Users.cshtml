@@ -5,8 +5,14 @@
 
 <h2>Users</h2>
 
-<p ng-repeat="item in users">
-    {{item.Name}} {{item.Lastname}}
-</p>
+<div ng-repeat="item in users">
+    <h4>{{item.Name}} {{item.Lastname}}</h4>
+    <div ng-if="follows.includes(item.id)">
+        <button id="fb{{item.Id}}" class="btn btn-info" style="width: 100px" ng-click="Follow(item.Id)">Unfollow</button>
+    </div>
+    <div ng-if="!follows.includes(item.id)">
+        <button id="fb{{item.Id}}" class="btn btn-info" style="width: 100px" ng-click="Follow(item.Id)">follow</button>
+    </div>
+</div>
 
 <h2 style="color: red" id="errorMessage"></h2>

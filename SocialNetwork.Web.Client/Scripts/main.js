@@ -5,6 +5,8 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
     $scope.href = window.document.location.href;
     $scope.profile;
     $scope.posts;
+    $scope.follows;
+    $scope.followers;
     $scope.Login = function () {
         $http({
             method: 'POST',
@@ -48,6 +50,22 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
                     $("#errorMessage").text("Request couldn't complete");
             });
     }
+    $scope.Follow = function (id) {
+        $http({
+            method: 'GET',
+            url: 'http://localhost/socialnet/api/Follow?id=' + id,
+            headers: {
+                'authorization': 'bearer ' + $scope.token
+            }
+        })
+            .then(function (res) {
+                console.log(res.data);
+                if (res.data.message == 'Followed')
+                    $('fb' + id).text = 'Unfollow'
+                else if (res.data.message == 'Unfollowed')
+                    $('fb' + id).text = 'Follow'
+            });
+    }
     $scope.GetPosts = function () {
         $http({
             method: 'GET',
@@ -63,7 +81,7 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
                 }
             });
     }
-    $scope.Profile = function () {
+    $scope.GetProfile = function () {
         $http({
             method: 'GET',
             url: 'http://localhost/socialnet/api/GetProfile',
@@ -74,6 +92,9 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
             .then(function (res) {
                 if (res.data.success) {
                     $scope.profile = res.data.user;
+                    $scope.follows = res.data.follows;
+                    $scope.followers = res.data.followers;
+                    console.log($scope.follows);
                 }
                 else
                     window.location.replace("/social/login");
@@ -145,9 +166,11 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
         if ($scope.href.includes("posts"))
             $scope.GetPosts();
         if (!$scope.href.includes("login") && !$scope.href.includes("register"))
-            $scope.Profile();
-        if ($scope.href.includes("users"))
+            $scope.GetProfile();
+        if ($scope.href.includes("users")) {
+            $scope.GetProfile();
             $scope.GetUsers();
+        }
         //    if ($scope.href.includes("posts"))
         //        $("#PostsNav").toggleClass("active");
         //    if ($scope.href.includes("users"))

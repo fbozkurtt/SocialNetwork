@@ -122,11 +122,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202003311243374_init.cs" />
-    <Compile Include="Migrations\202003311243374_init.designer.cs">
-      <DependentUpon>202003311243374_init.cs</DependentUpon>
+    <Compile Include="Migrations\202004140117166_init.cs" />
+    <Compile Include="Migrations\202004140117166_init.designer.cs">
+      <DependentUpon>202004140117166_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Entity\Follow.cs" />
     <Compile Include="Models\Entity\Post.cs" />
     <Compile Include="Models\Entity\User.cs" />
     <Compile Include="Models\SocialNetworkContext.cs" />
@@ -146,8 +147,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202003311243374_init.resx">
-      <DependentUpon>202003311243374_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202004140117166_init.resx">
+      <DependentUpon>202004140117166_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

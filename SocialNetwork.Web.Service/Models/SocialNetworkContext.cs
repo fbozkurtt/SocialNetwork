@@ -11,6 +11,7 @@ namespace SocialNetwork.Web.Service.Models
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Follow> Follows { get; set; }
         public SocialNetworkContext() : base("sclcnn")
         {
 

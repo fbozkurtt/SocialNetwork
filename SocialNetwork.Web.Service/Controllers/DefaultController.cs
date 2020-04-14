@@ -65,7 +65,9 @@ namespace SocialNetwork.Web.Service.Controllers
                 return Json(new
                 {
                     success = true,
-                    user
+                    user,
+                    follows = GetFollows(),
+                    followers = GetFollowers()
                 });
             }
             catch (Exception ex)
@@ -78,7 +80,7 @@ namespace SocialNetwork.Web.Service.Controllers
             }
         }
         [HttpGet]
-        [Authorize(Roles = "admin, superadmin")]
+        [Authorize(Roles = "user, admin, superadmin")]
         public IHttpActionResult GetAllUsers()
         {
             try
@@ -186,10 +188,14 @@ namespace SocialNetwork.Web.Service.Controllers
                 var responseString = await response.Content.ReadAsStringAsync();
                 var resp = JObject.Parse(responseString);
                 var token = resp.SelectToken("access_token");
+                var expires = resp.SelectToken("expires_in");
+                var error = resp.SelectToken("error_description");
                 return Json(new
                 {
                     success = token != null ? true : false,
-                    token
+                    token,
+                    expires,
+                    error
                 });
             }
             catch (Exception ex)
@@ -209,12 +215,51 @@ namespace SocialNetwork.Web.Service.Controllers
             {
                 using (var ctx = new SocialNetworkContext())
                 {
-                    ctx.Users.RemoveRange(ctx.Users.Where(w=>w.Role.Equals("user")));
+                    ctx.Users.RemoveRange(ctx.Users.Where(w => w.Role.Equals("user")));
                     ctx.Posts.RemoveRange(ctx.Posts);
                     ctx.SaveChanges();
                     return Json(new
                     {
                         success = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    error = ex.Message
+                });
+            }
+        }
+        [HttpGet]
+        [Authorize(Roles = "user, admin, superadmin")]
+        public IHttpActionResult Follow(int id)
+        {
+            try
+            {
+                var user = GetCurrentUser();
+                using (var ctx = new SocialNetworkContext())
+                {
+                    if (id == user.Id)
+                        throw new Exception("You can't follow yourself");
+                    var f = ctx.Follows.Where(w => w.UserId == id && w.FollowerId == user.Id).SingleOrDefault();
+                    if (f != null)
+                    {
+                        ctx.Follows.Remove(f);
+                    }
+                    else
+                        ctx.Follows.Add(new Follow()
+                        {
+                            FollowerId = user.Id,
+                            UserId = id
+                        });
+                    ctx.SaveChanges();
+                    return Json(new
+                    {
+                        success = true,
+                        message = f == null ? "Followed" : "Unfollowed"
                     });
                 }
             }
@@ -237,6 +282,26 @@ namespace SocialNetwork.Web.Service.Controllers
                 var username = claims[1].Value;
                 var user = ctx.Users.SingleOrDefault(w => w.Username == username);
                 return user;
+            }
+        }
+        [NonAction]
+        public List<Int32> GetFollowers()
+        {
+            var user = GetCurrentUser();
+            using (var ctx = new SocialNetworkContext())
+            {
+                var followers = ctx.Follows.Where(w => w.UserId == user.Id).Select(w => w.FollowerId).ToList();
+                return ctx.Users.Where(w => followers.Contains(w.Id)).Select(w=>w.Id).ToList();
+            }
+        }
+        [NonAction]
+        public List<Int32> GetFollows()
+        {
+            var user = GetCurrentUser();
+            using (var ctx = new SocialNetworkContext())
+            {
+                var follows = ctx.Follows.Where(w => w.FollowerId == user.Id).Select(w => w.UserId).ToList();
+                return ctx.Users.Where(w => follows.Contains(w.Id)).Select(w => w.Id).ToList();
             }
         }
     }

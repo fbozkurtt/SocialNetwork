@@ -8,6 +8,16 @@
         public override void Up()
         {
             CreateTable(
+                "dbo.Follows",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        UserId = c.Int(nullable: false),
+                        FollowerId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.Posts",
                 c => new
                     {
@@ -42,6 +52,7 @@
         {
             DropTable("dbo.Users");
             DropTable("dbo.Posts");
+            DropTable("dbo.Follows");
         }
     }
 }
