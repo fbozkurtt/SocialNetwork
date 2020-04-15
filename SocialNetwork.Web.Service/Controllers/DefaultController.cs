@@ -37,6 +37,15 @@ namespace SocialNetwork.Web.Service.Controllers
             {
                 using (var ctx = new SocialNetworkContext())
                 {
+#if SECURE
+                    user.Role = "user";
+#endif
+                    if(ctx.Users.Where(w=>w.Email==user.Email).SingleOrDefault()!=null)
+                        return Json(new
+                        {
+                            success = false,
+                            error = "E-mail is in use"
+                        });
                     user.DateCreated = DateTime.Now;
                     ctx.Users.Add(user);
                     ctx.SaveChanges();
@@ -62,6 +71,9 @@ namespace SocialNetwork.Web.Service.Controllers
             try
             {
                 var user = GetCurrentUser();
+#if SECURE
+                user.Password = null;
+#endif
                 return Json(new
                 {
                     success = true,
@@ -88,6 +100,12 @@ namespace SocialNetwork.Web.Service.Controllers
                 using (var ctx = new SocialNetworkContext())
                 {
                     var users = ctx.Users.ToList();
+#if SECURE
+                    foreach(var u in users)
+                    {
+                        u.Password = null;
+                    }
+#endif
                     return Json(new
                     {
                         success = true,
@@ -150,7 +168,8 @@ namespace SocialNetwork.Web.Service.Controllers
                             Title = p.Title,
                             Date = p.DateCreated.ToString("HH:mm:ss dddd MMMM yyyy"),
                             User = user.Username,
-                            Media = p.Media
+                            Media = p.Media,
+                            Id=p.Id
                         });
                     }
                     ctx.SaveChanges();
@@ -272,6 +291,39 @@ namespace SocialNetwork.Web.Service.Controllers
                 });
             }
         }
+        [HttpGet]
+#if SECURE
+        [Authorize(Roles = "admin, superadmin")]
+#else
+        [Authorize(Roles = "user, admin, superadmin")]
+#endif
+        public IHttpActionResult DeletePost(int id)
+        {
+            try
+            {
+                using (var ctx = new SocialNetworkContext())
+                {
+                    var post = ctx.Posts.Where(w => w.Id == id).SingleOrDefault();
+                    if (post != null)
+                    {
+                        ctx.Posts.Remove(post);
+                    }
+                    ctx.SaveChanges();
+                    return Json(new
+                    {
+                        success = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    error = ex.Message
+                });
+            }
+        }
         [NonAction]
         public User GetCurrentUser()
         {
@@ -291,7 +343,7 @@ namespace SocialNetwork.Web.Service.Controllers
             using (var ctx = new SocialNetworkContext())
             {
                 var followers = ctx.Follows.Where(w => w.UserId == user.Id).Select(w => w.FollowerId).ToList();
-                return ctx.Users.Where(w => followers.Contains(w.Id)).Select(w=>w.Id).ToList();
+                return ctx.Users.Where(w => followers.Contains(w.Id)).Select(w => w.Id).ToList();
             }
         }
         [NonAction]

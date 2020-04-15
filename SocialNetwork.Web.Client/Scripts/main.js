@@ -48,6 +48,26 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
                     $("#errorMessage").text("Request couldn't complete");
             });
     }
+    $scope.DeletePost = function (id) {
+        $http({
+            method: 'GET',
+            url: 'http://localhost/socialnet/api/DeletePost?id=' + id,
+            headers: {
+                'authorization': 'bearer ' + $scope.token
+            }
+        })
+            .then(function (res) {
+                //console.log(res.status);
+                if (res.data.success) {
+                    window.location.replace("/social/posts");
+                }
+                else if (res.status == '401')
+                    $("#errorMessage").text("Authorization has been denied");
+            })
+            .catch(function (err) {
+                $("#errorMessage_").text(err.data.Message);
+            });
+    }
     $scope.Follow = function (id) {
         $http({
             method: 'GET',

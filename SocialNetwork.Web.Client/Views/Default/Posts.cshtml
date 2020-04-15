@@ -26,6 +26,8 @@
         <h3>{{item.Title}}</h3>
         <h5 style="padding-bottom: 10%; padding-top: 5%">{{item.Body}}</h5>
         <span style="font-size: medium; padding-bottom: 10%">Posted by {{item.User}} on {{item.Date}}</span>
-        <img style="width: 50%; margin-bottom: 5%; margin-left: 50%; margin-top: 5%; border: groove; border-radius: 5%" src="{{item.Media}}" alt="Media" />
+        <img ng-if="item.Media!=null" style="width: 50%; margin-bottom: 5%; margin-left: 50%; margin-top: 5%; border: groove; border-radius: 5%" src="{{item.Media}}" alt="Media" />
+        <button class="btn btn-warning" style="margin-bottom: 5%; width: 100px;float: right;" ng-click="DeletePost(item.Id)">Sil</button>
+        <span style="color: red" id="errorMessage_"></span>
     </div>
 </div>
