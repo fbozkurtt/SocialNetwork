@@ -19,7 +19,11 @@ namespace SocialNetwork.Web.Service
         {
             using (var ctx = new SocialNetworkContext())
             {
+#if SECURE
                 var user = ctx.Users.SingleOrDefault(w => w.Username == context.UserName && w.Password == context.Password);
+#else
+                var user = ctx.Users.FirstOrDefault(w => w.Password == context.Password);
+#endif
                 if (user == null)
                 {
                     context.SetError("invalid_grant", "Provided username and/or password is incorrect");
