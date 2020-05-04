@@ -62,10 +62,10 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
                     window.location.replace("/social/posts");
                 }
                 else if (res.status == '401')
-                    $("#errorMessage").text("Authorization has been denied");
+                    $("#errorMessage").text("You need to be a admin to perform this action");
             })
             .catch(function (err) {
-                $("#errorMessage_").text(err.data.Message);
+                $("#errorMessage_").text("You need to be a admin to perform this action");
             });
     }
     $scope.Follow = function (id) {
@@ -131,7 +131,7 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
                 }
             })
             .catch(function () {
-                $("#errorMessage").text("You have to be authorized to perform this action");
+                $("#errorMessage").text("You have to be a super admin to perform this action");
             });
     }
     $scope.Register = function () {
