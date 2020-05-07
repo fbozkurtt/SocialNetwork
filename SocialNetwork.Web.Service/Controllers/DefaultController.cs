@@ -106,6 +106,7 @@ namespace SocialNetwork.Web.Service.Controllers
                         u.Password = null;
                     }
 #endif
+                    //Sensitive Data Exposure
                     return Json(new
                     {
                         success = true,
@@ -295,6 +296,7 @@ namespace SocialNetwork.Web.Service.Controllers
 #if SECURE
         [Authorize(Roles = "admin, superadmin")]
 #else
+        //Broken Access Control
         [Authorize(Roles = "user, admin, superadmin")]
 #endif
         public IHttpActionResult DeletePost(int id)

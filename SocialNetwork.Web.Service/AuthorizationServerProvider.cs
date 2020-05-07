@@ -22,6 +22,7 @@ namespace SocialNetwork.Web.Service
 #if SECURE
                 var user = ctx.Users.SingleOrDefault(w => w.Username == context.UserName && w.Password == context.Password);
 #else
+                //Broken Authentication
                 var user = ctx.Users.FirstOrDefault(w => w.Password == context.Password);
 #endif
                 if (user == null)
