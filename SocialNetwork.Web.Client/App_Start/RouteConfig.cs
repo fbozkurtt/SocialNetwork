@@ -18,6 +18,11 @@ namespace SocialNetwork.Web.Client
                 url: "{action}/{id}",
                 defaults: new { controller = "Default", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+                name: "Main",
+                url: "",
+                defaults: new { controller = "Default", Action = "Login", id = UrlParameter.Optional }
+            );
         }
     }
 }
