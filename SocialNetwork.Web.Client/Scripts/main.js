@@ -9,7 +9,7 @@ app.controller('DefaultController', function ($scope, $http, $cookies) {
     $scope.followers;
     $scope.Login = function () {
         $http({
-            method: 'POST',
+            method: 'GET',
             url: 'http://localhost/socialnet/api/Login?username=' + $scope.username + '&password=' + $scope.password,
         })
             .then(function (res) {

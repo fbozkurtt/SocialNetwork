@@ -190,7 +190,7 @@ namespace SocialNetwork.Web.Service.Controllers
                 });
             }
         }
-        [HttpPost]
+        [HttpGet]
         [AllowAnonymous]
         public async Task<IHttpActionResult> Login(string username, string password)
         {
